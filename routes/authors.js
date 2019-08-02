@@ -3,7 +3,7 @@ const router = express.Router()
 const Author = require('../models/author')
 
 //All 
-router.get('', async (req, res) =>{
+router.get('/', async (req, res) =>{
 	let searchOptions = {} 
 	if(req.query.name != null && req.query.name !== ''){
 		searchOptions.name = new RegExp(req.query.name, 'i')
@@ -17,33 +17,28 @@ router.get('', async (req, res) =>{
 	}catch{
 		res.redirect('/')
 	}
-
-	
 })
 
 //New
-router.get('/new',(req, res) =>{
-	res.render('authors/new',{author: new Author( )})
+router.get('/new' , (req, res) => {
+	res.render('authors/new',{ author: new Author() })
 })
 
 //Create
-router.post('/', async (req,res)=>{
+router.post('/', async (req,res) => {
 	const author = new Author({
-		name:req.body.name
+		name : req.body.name
 	})
-try{
-	const newAuthor = await author.save()
-	// res.redirect(`authors/${newAuthor.id}`)
-	res.redirect(`authors`)
-}catch{
-	res.render('authors/new',{
-		author: author,	
-		errorMessage: 'Error creating Author'
-	})
-}
-
-
-	res.send()
+	try{
+		const newAuthor = await author.save()
+		// res.redirect(`authors/${newAuthor.id}`)
+		res.redirect(`authors`)
+	}catch{
+		res.render('authors/new', {
+			author: author,	
+			errorMessage: 'Error creating Author'
+		})
+	}
 })
 
 module.exports = router
